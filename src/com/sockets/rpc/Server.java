@@ -9,7 +9,8 @@ import java.net.Socket;
 
 public class Server {
     public static void main(String[] args) throws Exception{
-        ServerSocket server = new ServerSocket(5000);
+        //Enter port on which server will be listening below inside ServerSocket constructor
+        ServerSocket server = new ServerSocket();
 
         System.out.println("I am waiting................");
         Socket soc = server.accept();
