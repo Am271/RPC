@@ -257,7 +257,7 @@ public class MultiThreadedServer {
     {
         ServerSocket server = null;
         try {
-            server = new ServerSocket(80);
+            server = new ServerSocket(1234);
             server.setReuseAddress(true);
             System.out.println("Server started on port 1234...");
             while (true) {
