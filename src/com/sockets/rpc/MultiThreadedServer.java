@@ -8,7 +8,7 @@ public class MultiThreadedServer {
     {
         ServerSocket server = null;
         try {
-            server = new ServerSocket(1234);
+            server = new ServerSocket(80);
             server.setReuseAddress(true);
             while (true) {
                 Socket client = server.accept();
