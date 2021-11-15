@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import org.json.*;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
 
 class Services {
@@ -253,13 +254,14 @@ class ServerStub {
 }
 
 public class MultiThreadedServer {
+    private static int port = 5000;
     public static void main(String[] args)
     {
         ServerSocket server = null;
         try {
-            server = new ServerSocket(1234);
+            server = new ServerSocket(port);
             server.setReuseAddress(true);
-            System.out.println("Server started on port 1234...");
+            System.out.println("Server started on port " + port + "...");
             while (true) {
                 Socket client = server.accept();
                 System.out.println("New client connected: " + client.getInetAddress().getHostAddress());
@@ -290,17 +292,28 @@ public class MultiThreadedServer {
         }
 
         private void sendBroadcast(PrintWriter out) {
-            JSONObject obj = new JSONObject();
-            JSONArray methodJson = new JSONArray();
-            Class services = Services.class;
-            Method[] methods = services.getMethods();
-            String methodList = "";
-            for(Method method : methods) {
-                if(method.getName().startsWith("get"))
-                    methodJson.put(method.getName());
+            // JSONObject obj = new JSONObject();
+            // JSONArray methodJson = new JSONArray();
+            // Class services = Services.class;
+            // Method[] methods = services.getMethods();
+            // // String methodList = "";
+            // // for(Method method : methods) {
+            // //     if(method.getName().startsWith("get"))
+            // //         obj.put(method.getName(), "temp");
+            // // }
+            // // obj.put();
+            // Parameter[] parameters = methods[0].getParameters();
+            // out.println(parameters[0].getName());
+
+            Class clz = Services.class;
+            String str = "";
+            for (Method m : clz.getDeclaredMethods()) {
+               System.err.println(m.getName());
+               for (Parameter p : m.getParameters()) {
+                str += "  " + p.getName();
+               }
             }
-            obj.put("functions", methodJson);
-            out.println(obj.toString());
+            out.println(str);
         }
 
         public void run()
@@ -312,6 +325,7 @@ public class MultiThreadedServer {
                 in = new BufferedReader(new InputStreamReader (clientSocket.getInputStream()));
                 String line;
                 while ((line = in.readLine()) != null) {
+                    System.out.println("Received a request!");
                     if(line.equals("BROADCAST")) {
                         sendBroadcast(out);
                     }
