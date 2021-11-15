@@ -1,0 +1,4 @@
+{
+	"getCapitalCity" : {"accepts" : ["String"], "returns" : ["String"]},
+	"getState" : {"accepts" : ["String", ...], "returns" : ["String"]}
+}
