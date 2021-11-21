@@ -1,18 +1,23 @@
 import socket
-import os
+import os, sys
 from _thread import *
 import stub
 
 ServerSocket = socket.socket()
 #Enter host IP address and port number
+if not len(sys.argv) > 1:
+    print('Port number not specified! Use as: $ python3 server.py <port>')
+    sys.exit()
+
 host = ''
-port = 
+port = int(sys.argv[1])
 distinctClients = 0
 
 try:
     ServerSocket.bind((host, port))
 except socket.error as e:
     print("Exception occured ",str(e))
+    sys.exit()
 
 print('Waiting for a Connection..')
 ServerSocket.listen(5)
