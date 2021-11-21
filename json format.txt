@@ -2,3 +2,13 @@
 	"getCapitalCity" : {"accepts" : ["String"], "returns" : ["String"]},
 	"getState" : {"accepts" : ["String", ...], "returns" : ["String"]}
 }
+
+{
+	"call" : <no. of functions to call>,
+	"<function name>" : ["<parameters in string form separated by comma>"]
+}
+
+{
+	"results" : <no. of results>,
+	"<function name>" : "<result as a string>"
+}
