@@ -1,6 +1,7 @@
 import socket
 import os
 from _thread import *
+import stub
 
 ServerSocket = socket.socket()
 #Enter host IP address and port number
@@ -21,7 +22,13 @@ def threaded_client(connection):
     connection.send(str.encode('Welcome to the Remote Procedure Call Server'))
     while True:
         data = connection.recv(2048)
-        reply = 'Server Says: ' + data.decode('utf-8')
+        req = data.decode('utf-8')
+        if req == 'BROADCAST':
+            reply = stub.broadcast()
+        else:
+
+            reply = 'Malformed request received, send request again'
+        # reply = 'Server Says: ' + data.decode('utf-8')
         if not data:
             break
         connection.sendall(str.encode(reply))
