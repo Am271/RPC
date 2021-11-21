@@ -3,8 +3,9 @@ import os
 from _thread import *
 
 ServerSocket = socket.socket()
-host = '127.0.0.1'
-port = 1233
+#Enter host IP address and port number
+host = ''
+port = 
 distinctClients = 0
 
 try:
