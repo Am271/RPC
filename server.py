@@ -29,10 +29,22 @@ def threaded_client(connection):
         data = connection.recv(2048)
         req = data.decode('utf-8')
         if req == 'BROADCAST':
+
+            # Calls the broadcast function from to stub to obtain and send all the available methods
+            print('Broadcast received from client, sending method list and description')
             reply = stub.broadcast()
         else:
+            # process() in stub returns a tuple containing the status code of operation and
+            # attempts to perform the method call and return the result
+            req_status, result = stub.process(req)
 
-            reply = 'Malformed request received, send request again'
+            # Checks if the request code is 0, i.e. if the client sent an incorrect request
+            if not req_status:
+                reply = 'Malformed request received, send request again'
+            else:
+                # Sends the result of the method call as a formatted JSON string
+                print('Method call request received, performing method call')
+                reply = result
         # reply = 'Server Says: ' + data.decode('utf-8')
         if not data:
             break
