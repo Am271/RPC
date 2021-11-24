@@ -17,7 +17,7 @@ def broadcast():
 
 	# Prepare a JSON string to send to client
 	json_string = "{"
-	
+
 	for i in method_list:
 
 		# Add method names and method descriptions to JSON
@@ -29,6 +29,13 @@ def broadcast():
 	# Return the json formatted string to server
 	return json_string
 
+def check(req):
+	if not isinstance(req.get('call'), int): # Checks if 'call' is a key in the request JSON, also checks if the value is an integer
+		return False
+	if not len(req.keys()) - 1 == req.get('call'): # Checks if the number of functions declared equals the number of keys - 1 in the JSON
+		return False
+	return True
+
 
 # Function to process requests other than broadcasts from the server
 def process(req):
@@ -36,7 +43,27 @@ def process(req):
 	try:
 		call_dict = eval(req)
 	except:
-		return 0,0
-	for i in range(call_dict['call']):
-		print(i)
-	return 1,"CALL successful"
+		return "Malformed JSON received, send request again"
+    
+    if not isinstance(req.get('call'), int): # Checks if 'call' is a key in the request JSON, also checks if the value is an integer
+        return "Malformed JSON received, send request again"
+    
+    if not len(req.keys()) - 1 == req.get('call'): # Checks if the number of functions declared equals the number of keys - 1 in the JSON
+        return "Number of functions declared is not equal to the number of function calls in the JSON"
+    
+	else:
+		# Create an object to perform function calls
+		obj = services.service()
+		res_json = { 'results' : 0, 'errors' : [] } # Result in JSON to be returned
+		success = 0 # Keeps count of number of functions that were successfully executed
+		# Perform function calls
+		for k, v in call_dict:
+			if k == 'call': # If the key is 'call', the loop continues to the next key
+				continue
+			try:
+				res = getattr(obj, k)(*v) # Attempts to obtain reference to function and perform the function call
+				res_json[k] = res # Stores the result in JSON
+				res_json['results'] += 1 # Counts the number of successful results
+			except TypeError:
+				res_json['errors'].append(k) # Stores the function names with incorrect list of parameters
+        return res_json
