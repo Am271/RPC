@@ -29,13 +29,6 @@ def broadcast():
 	# Return the json formatted string to server
 	return json_string
 
-def check(req):
-	if not isinstance(req.get('call'), int): # Checks if 'call' is a key in the request JSON, also checks if the value is an integer
-		return False
-	if not len(req.keys()) - 1 == req.get('call'): # Checks if the number of functions declared equals the number of keys - 1 in the JSON
-		return False
-	return True
-
 
 # Function to process requests other than broadcasts from the server
 def process(req):
