@@ -10,5 +10,6 @@
 
 {
 	"results" : <no. of results>,
+	"errors" : ["<functions that could not be executed>"],
 	"<function name>" : "<result as a string>"
 }
