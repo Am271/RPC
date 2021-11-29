@@ -50,6 +50,7 @@ def process(req):
         res_json = { 'results' : 0, 'errors' : [] } # Result in JSON to be returned
         success = 0 # Keeps count of number of functions that were successfully executed
         # Perform function calls
+        print(call_dict)
         for k, v in call_dict.items():
             if k == 'call': # If the key is 'call', the loop continues to the next key
                 continue

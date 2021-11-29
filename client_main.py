@@ -25,33 +25,46 @@ ClientSocket.send(str.encode("BROADCAST"))
 Response = ClientSocket.recv(1024);
 broadcast = eval(Response.decode("utf-8"))
 bcL = broadcast.items()
+dict2 = {}
 
 while True:
 
-    print("Available functions are:")
+    print("----->Available functions are<-----")
     c =1
-    for i,j in bcL:s
-        print(c,":",i,"\n"+str(j))
+    for i,j in bcL:
+        print(c,":",i,"\t"+str(j))
         c+=1
 
-    clinetIp = input("Choose a function")
-    dict2 = {}
+    print("-->Choose a function<--")
     print("Press s to send rpc request")
-    choice = input()
+    choice = input('> ')
     if choice == 's':
         dict2['call'] = len(dict2.items())
-        print(dict2)
+        # print(dict2)
+        ClientSocket.send(str.encode(str(dict2)))
+        dict2 = {}
+        dict2 = eval(ClientSocket.recv(1024))
+        print("----->Results<-----")
+        for i in range(dict2.get('results')):
+            k, v = list(dict2.items())[i + 2]
+            print(k, ':', dict2.get(k))
+        if(dict2.get('errors')):
+            print('The following functions have a wrong list of parameters')
+            for i in dict2.get('errors'):
+                print(i)
+        dict2 = {}
     else:
-        dicVal = int(choice)-1
-        k,j =list(dic1.items())[dicVal]
-        j = [i for i in input('Enter parameters: ')]
+        dicVal = int(choice) - 1
+        k,j =list(broadcast.items())[dicVal]
+        j = [i for i in input('Enter parameters: ').split()]
+        # print(k, j)
         dict2[k] = j
 
-while True:
-    Input = input('Say Something: ')
-    ClientSocket.send(str.encode(Input))
-    Response = ClientSocket.recv(1024)
-    #Decodes response to UTF-8 format
-    print(Response.decode('utf-8'))
+# while True:
+#     Input = input('Say Something: ')
+#     ClientSocket.send(str.encode(Input))
+#     Response = ClientSocket.recv(1024)
+#     #Decodes response to UTF-8 format
+#     print(Response.decode('utf-8'))
 
 ClientSocket.close()
